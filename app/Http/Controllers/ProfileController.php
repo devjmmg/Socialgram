@@ -40,10 +40,29 @@ class ProfileController extends Controller
         
         $request->request->add(['username' => Str::slug($request->username)]);
         
-        $this->validate($request,[
+        $this->validate($request, [
             'name' => 'required|max:30|string',
-            'username' => 'required|unique:users,username,'.auth()->user()->id.'|min:5|max:30',
-            'email' => 'required|email|unique:users,email,'.auth()->user()->id.'|max:100',
+            'username' => 'required|unique:users,username,' . auth()->user()->id . '|min:5|max:30',
+            'email' => 'required|email|unique:users,email,' . auth()->user()->id . '|max:100',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,avif,webp|max:2048',
+        ], [
+            'name.required' => 'El nombre es requerido.',
+            'name.max' => 'El nombre no puede tener más de 30 caracteres.',
+            'name.string' => 'El nombre debe ser una cadena de texto.',
+
+            'username.required' => 'El nombre de usuario es requerido.',
+            'username.unique' => 'El nombre de usuario  se encuentra en uso.',
+            'username.min' => 'El nombre de usuario debe tener al menos 5 caracteres.',
+            'username.max' => 'El nombre de usuario no puede tener más de 30 caracteres.',
+
+            'email.required' => 'El correo electrónico es requerido.',
+            'email.email' => 'El correo electrónico debe tener un formato válido.',
+            'email.unique' => 'El correo electrónico  se encuentra en uso.',
+            'email.max' => 'El correo electrónico no puede tener más de 100 caracteres.',
+
+            'image.image' => 'El archivo seleccionado debe ser una imagen.',
+            'image.mimes' => 'La imagen debe ser JPG, JPEG, PNG, AVIF o WEBP.',
+            'image.max' => 'La imagen no puede pesar más de 2 MB.',
         ]);
 
         if($request->file('image'))
@@ -82,7 +101,7 @@ class ProfileController extends Controller
         $user->image = $imageName ?? auth()->user()->image ?? '';
         $user->save();
 
-        return redirect()->route('posts.index',$user);
+        return back()->with('profile_success', 'El perfil se actualizó correctamente.');
         
     }
     
