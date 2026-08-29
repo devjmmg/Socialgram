@@ -1,48 +1,35 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\FriendController;
 use App\Http\Controllers\HomeController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LikeController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RegisterController;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-//Método tipo clousure
-// Route::get('/', function () {
-//     return view('principal');
-// });
-
-//HomeController
-//Route::get('/',[HomeController::class,'index'])->name('home.index');
+use Illuminate\Support\Facades\Route;
 
 //Si solo vamos a tener una función en un controlador podemos hacer uso del constructor invoke
-Route::get('/', HomeController::class)->name('home.index');
 
-Route::get('/register', [RegisterController::class,'index'])->name('register.index');
-Route::post('/register', [RegisterController::class,'store'])->name('register.store');
 
-Route::get('/login', [LoginController::class,'index'])->name('login.index');
-Route::post('/login', [LoginController::class,'store'])->name('login.store');
+Route::middleware(['guest'])->group(function() {
+    Route::get('/login', [AuthController::class,'login'])->name('login');
+    Route::post('/login', [AuthController::class,'authenticate'])->name('login.authenticate');
 
-Route::post('/logout',[LogoutController::class,'store'])->name('logout.store');
+    Route::get('/register', [AuthController::class,'register'])->name('register');
+    Route::post('/register', [AuthController::class,'store'])->name('register.store');
+    
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/logout',[AuthController::class,'logout'])->name('logout');
+    Route::get('/', HomeController::class)->name('home.index');
+});
+
+
 
 Route::get('/{user:username}',[PostController::class,'index'])->name('posts.index');
 Route::get('/posts/create',[PostController::class,'create'])->name('posts.create');
