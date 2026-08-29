@@ -6,7 +6,9 @@ Perfil
 
 @section('content')
 
-<div class="flex flex-col items-center sm:flex-row md:justify-center gap-8 mb-8">
+<main class="mt-15 flex-1">
+
+    <div class="flex flex-col items-center sm:flex-row md:justify-center gap-8 mb-8">
     <div class="w-full text-right relative">
         
         <img class="w-full inline-block lg:w-1/2 rounded-full" 
@@ -110,17 +112,19 @@ Perfil
 @endauth
 
 @guest
-<p class="text-center text-xl font-semibold text-gray-500 mt-6">
-    ¡
-    <a href="{{route('register.index')}}" class="text-blue-500">
-        Regístrate ahora
-    </a>
-    o
-    <a href="{{route('login.index')}}" class="text-blue-500">
-        Inicia sesión
-    </a>
-    y sigue a tus amigos para ver sus publicaciones!
-</p>
+    <p class="text-center text-xl font-semibold text-gray-500 mt-6">
+        ¡
+        <a href="{{route('register')}}" class="text-blue-500">
+            Regístrate ahora
+        </a>
+        o
+        <a href="{{route('login')}}" class="text-blue-500">
+            Inicia sesión
+        </a>
+        y sigue a tus amigos para ver sus publicaciones!
+    </p>
 @endguest
+
+</main>
 
 @endsection
