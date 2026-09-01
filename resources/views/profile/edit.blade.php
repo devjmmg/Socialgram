@@ -116,7 +116,7 @@
 
             </form>
 
-            <div class="w-96 h-96 mx-auto">
+            <div class="w-full max-w-96 max-h-96 mx-auto">
                 <img
                     class="w-full h-full object-cover rounded-full"
                     src="{{ empty($user->image) ? asset('img/usuario.svg') : asset('profiles/'.$user->image) }}"
