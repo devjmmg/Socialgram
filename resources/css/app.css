@@ -3,6 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    /* Permite esconde el scroll sin que de un salto la página */
+    scrollbar-gutter: stable;
+}
+
 body {
     font-family: "Inter", sans-serif;
 }

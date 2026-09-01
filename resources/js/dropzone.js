@@ -32,7 +32,6 @@ export function initializeDropzone( dropzoneElement, inputImage)
     // Evento success para guardar la imagen
     dropzone.on('success', function (file, response) {
         inputImage.value = response.image;
-        console.log(file, response);  // Aquí puedes agregar alguna acción si es necesario
     });
     
     // Evento removedfile para limpiar la imagen

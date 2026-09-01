@@ -11,8 +11,11 @@ module.exports = {
                 '15': '15deg',
             },
             margin: {
-            '15': '60px',
-        },
+                '15': '60px',
+            },
+            spacing: {
+                '15': '60px',
+            },
         },
     },
     plugins: [
