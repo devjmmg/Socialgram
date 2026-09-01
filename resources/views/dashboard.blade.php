@@ -49,7 +49,7 @@ Perfil
         
         @if (!$user->followedBy( auth()->user()))
         
-        <form action="{{route('follow.store',$user)}}" method="POST">
+        <form action="{{route('follow.store', $user)}}" method="POST">
             @csrf
             <input
             type="submit"
@@ -59,7 +59,7 @@ Perfil
         
         @else
         
-        <form action="{{route('follow.destroy',$user)}}" method="POST">
+        <form action="{{route('follow.destroy', $user)}}" method="POST">
             @csrf
             @method('DELETE')
             <input

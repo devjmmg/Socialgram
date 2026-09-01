@@ -14,7 +14,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-center justify-center">
 
-            <form action="{{route('profile.update',$user)}}" method="POST" enctype="multipart/form-data" >
+            <form action="{{route('profile.update', $user)}}" method="POST" enctype="multipart/form-data" >
                 @csrf
 
                 <div class="mb-4">
@@ -136,7 +136,7 @@
             <p class="text-green-500 text-sm mb-4"> {{ session('password_success') }} </p>
         @endif
 
-        <form action="{{route('password.update',$user)}}" method="POST">
+        <form action="{{route('password.update', $user)}}" method="POST">
                 
                 @csrf
                 

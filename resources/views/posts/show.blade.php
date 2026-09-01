@@ -15,7 +15,7 @@
             
             <livewire:like-post :post="$post" />
             
-            <p class="font-semibold"> <a href="{{route('posts.index',$user)}}">{{$post->user->username}}</a> | <span class="text-gray-500 text-sm">{{$post->created_at->diffForHumans()}}</span></p>
+            <p class="font-semibold"> <a href="{{route('posts.index', $user)}}">{{$post->user->username}}</a> | <span class="text-gray-500 text-sm">{{$post->created_at->diffForHumans()}}</span></p>
         </div>
         
         <p class="px-4 md:px-0">{{$post->description}}</p>
