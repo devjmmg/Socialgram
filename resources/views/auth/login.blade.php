@@ -18,7 +18,7 @@ Iniciar sesión
             >
         </div>
 
-        <div class="flex flex-col justify-center p-6">
+        <div class="flex flex-col justify-center p-4">
             
             <div class="w-full max-w-lg mx-auto">
 
