@@ -47,18 +47,18 @@
                         </div>
                     </a>
 
-                    <div class="flex gap-2">
+                    <div class="flex items-center gap-2">
 
                         <button
                             wire:click="accept({{ $item->id }})"
-                            class="text-xs bg-blue-500 hover:bg-blue-600 transition-colors ease-linear duration-300 text-white px-2 py-1 rounded"
+                            class="w-full text-xs bg-blue-500 hover:bg-blue-600 transition-colors ease-linear duration-300 text-white p-2 rounded"
                         >
                             Aceptar
                         </button>
 
                         <button
                             wire:click="reject({{ $item->id }})"
-                            class="text-xs text-gray-500 hover:text-gray-600 transition-colors ease-linear duration-300 border border-gray-300 px-2 py-1 rounded"
+                            class="w-full text-xs text-gray-500 hover:text-gray-600 transition-colors ease-linear duration-300 border border-gray-300 p-2 rounded"
                         >
                             Rechazar
                         </button>
