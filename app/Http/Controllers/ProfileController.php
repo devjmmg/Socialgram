@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Laravel\Facades\Image;
 
 class ProfileController extends Controller
 {
@@ -71,26 +72,20 @@ class ProfileController extends Controller
             $image = $request->file('image');
             
             //Generar un nombre único para la imagen
-            // $imageName = Str::uuid() . '.' .  $image->extension();
             $imageName = Str::uuid() . '.avif';
             
             $serverImage = Image::read($image); // Crear una instacia de Intervention Image
-            $serverImage->cover(1000,1000); // Redimensionar la imagen
+            $serverImage->cover(1080,1080); // Redimensionar la imagen
             
-            //Ruta donde se va a guardar la imagen
-            $pathImage = public_path('profiles/'.$imageName);
+            Storage::disk('public')->put(
+                'profile/' . $imageName,
+                $serverImage->toAvif()
+            );
             
-            // Asegurarse de que el directorio exista
-            if (!file_exists(public_path('profiles'))) {
-                mkdir(public_path('profiles'), 0755, true);
-            }
-            
-            //Guardar la imagen modificada
-            $serverImage->toAvif()->save($pathImage);
-
-            //Quitar la antigua imagen
-            if($request->user()->image){
-                unlink(public_path('profiles/'.$request->user()->image));
+            if ($request->user()->image) {
+                Storage::disk('public')->delete(
+                    'profile/' . $request->user()->image
+                );
             }
         }
 

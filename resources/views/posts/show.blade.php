@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-{{$post->title}}
+    {{$post->title}}
 @endsection
 
 @section('content')
@@ -9,13 +9,13 @@
 <div class="flex flex-col gap-8 md:flex-row">
     
     <div class="md:w-1/2 flex flex-col gap-4 justify-center">
-        <img class="rounded-lg" src="{{asset('uploads/'.$post->image)}}" alt="Imagen Post">
+        <img class="rounded-lg" src="{{ asset('storage/uploads/' . $post->image) }}" alt="Imagen Post">
         
         <div class="flex flex-col px-4 md:px-0 gap-2 xl:flex-row xl:gap-0 xl:justify-between">
             
             <livewire:like-post :post="$post" />
             
-            <p class="font-semibold"> <a href="{{route('posts.index', $user)}}">{{$post->user->username}}</a> | <span class="text-gray-500 text-sm">{{$post->created_at->diffForHumans()}}</span></p>
+            <p class="font-semibold"> <a href="{{ route('posts.index', $user) }}">{{ $post->user->username }}</a> | <span class="text-gray-500 text-sm">{{$post->created_at->diffForHumans()}}</span></p>
         </div>
         
         <p class="px-4 md:px-0">{{$post->description}}</p>

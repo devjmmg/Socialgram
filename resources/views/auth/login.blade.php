@@ -13,7 +13,7 @@ Iniciar sesión
         <div class="">
             <img
                 class="block h-full w-full object-contain"
-                src="{{ asset('img/login.avif') }}"
+                src="{{ asset('storage/assets/login.avif') }}"
                 alt="Imagen inicio de sesión"
             >
         </div>

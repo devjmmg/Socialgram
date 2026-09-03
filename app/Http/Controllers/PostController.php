@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -62,19 +63,12 @@ class PostController extends Controller
     
     public function destroy(Post $post)
     {
-        
         $this->authorize('delete',$post);
-        $post->delete();
-        
-        $pathImage = public_path('uploads/'.$post->image);
-
-        if(File::exists($pathImage)) {
-            unlink($pathImage);
-            //File::delete($pathImage);
-        }
-        
+        Storage::disk('public')->delete(
+            'uploads/' . $post->image
+        );
+        $post->delete();   
         return redirect()->route('posts.index',auth()->user()->username);
-        
     }
     
 }

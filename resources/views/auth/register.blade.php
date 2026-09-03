@@ -13,7 +13,7 @@ Crear cuenta
         <div class="">
             <img
                 class="block h-full w-full object-contain"
-                src="{{ asset('img/register.avif') }}"
+                src="{{ asset('storage/assets/register.avif') }}"
                 alt="Imagen de registro"
             >
         </div>

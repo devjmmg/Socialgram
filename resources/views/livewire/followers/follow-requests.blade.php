@@ -17,7 +17,7 @@
                 >
                     <img
                         class="size-11 rounded-full object-cover shrink-0"
-                        src="{{ empty($item->image) ? asset('img/usuario.svg') : asset('profiles/'.$item->image) }}"
+                        src="{{ empty($item->image) ? asset('storage/defaults/user.svg') : asset('storage/profile/' . $item->image) }}"
                         alt="Imagen usuario"
                     >
 

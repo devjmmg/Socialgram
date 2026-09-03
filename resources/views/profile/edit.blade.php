@@ -119,7 +119,7 @@
             <div class="w-full max-w-96 max-h-96 mx-auto">
                 <img
                     class="w-full h-full object-cover rounded-full"
-                    src="{{ empty($user->image) ? asset('img/usuario.svg') : asset('profiles/'.$user->image) }}"
+                    src="{{ empty($user->image) ? asset('storage/defaults/user.svg') : asset('storage/profile/' . $user->image) }}"
                     alt="Imagen usuario"
                 >
             </div>

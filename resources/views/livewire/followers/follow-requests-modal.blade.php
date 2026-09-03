@@ -32,7 +32,7 @@
                     <a href="{{ route('posts.index', $item->username) }}" class="flex items-center gap-3">
                         <img
                             class="size-11 rounded-full object-cover"
-                            src="{{ empty($item->image) ? asset('img/usuario.svg') : asset('profiles/'.$item->image) }}"
+                            src="{{ empty($item->image) ? asset('storage/defaults/user.svg') : asset('storage/profile/' . $item->image) }}"
                             alt="Imagen usuario"
                         >
 
