@@ -42,42 +42,8 @@
             <p class="text-lg text-gray-800 font-semibold">
                 {{$total}} <span class="font-normal">Post</span>
             </p>
-            
-            @auth
-                @if ($user->id !== auth()->user()->id)
 
-                    @php
-                        $follow = $user->follow(auth()->user());
-                    @endphp
-
-                    @if (!$follow)
-
-                        <form action="{{ route('followers.store', $user) }}" method="POST">
-                            @csrf
-                            <input
-                                type="submit"
-                                class="cursor-pointer bg-blue-500 text-white p-1 font-semibold rounded-md transition-colors duration-300 ease-linear hover:bg-blue-600 min-w-44 text-center"
-                                value="Seguir"
-                            >
-                        </form>
-
-                    @else
-
-                        <form action="{{ route('followers.destroy', $user) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-
-                            <input
-                                type="submit"
-                                class="cursor-pointer text-white p-1 font-semibold rounded-md transition-colors duration-300 ease-linear bg-gray-500 hover:bg-gray-600 min-w-44 text-center"
-                                value="{{ $follow->pivot->status === 'pending' ? 'Pendiente' : 'Siguiendo' }}"
-                            >
-                        </form>
-
-                    @endif
-
-                @endif
-            @endauth
+            <livewire:followers.follow-button :user="$user" />
         </div>
     </div>
 

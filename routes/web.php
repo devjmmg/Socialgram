@@ -27,15 +27,13 @@ Route::middleware(['guest'])->group(function() {
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class,'logout'])->name('logout');
     Route::get('/', HomeController::class)->name('home.index');
+
+    //Buscar amigos
+    Route::get('/friends', [FriendController::class,'index'])->name('friends.index');
+
+    //Siguiendo usuarios
+    Route::get('/followers', [FollowerController::class, 'index'])->name('followers.index');
 });
-
-//Buscar amigos
-Route::get('/friends', [FriendController::class,'index'])->name('friends.index');
-
-//Siguiendo usuarios
-Route::get('/followers', [FollowerController::class, 'index'])->name('followers.index');
-Route::post('/{user:username}/follow', [FollowerController::class,'store'])->name('followers.store');
-Route::delete('/{user:username}/unfollow', [FollowerController::class,'destroy'])->name('followers.destroy');
 
 Route::get('/{user:username}', [PostController::class,'index'])->name('posts.index');
 Route::get('/posts/create', [PostController::class,'create'])->name('posts.create');

@@ -12,12 +12,27 @@ class UserSearch extends Component
     #[Url(except: '')]
     public string $search = '';
 
+    #[On('friend-request-updated')]
+    public function refreshRequests() {}
+
     public int $perPage = 20;
     public bool $hasMore = false;
 
     public function loadMore()
     {
         $this->perPage += 20;
+    }
+
+    public function follow(User $user)
+    {
+        $user->followers()->attach( auth()->user()->id );
+        $this->dispatch('friend-request-updated');
+    }
+
+    public function unfollow(User $user)
+    {
+        $user->followers()->detach( auth()->user()->id );
+        $this->dispatch('friend-request-updated');
     }
 
     public function render()

@@ -42,7 +42,10 @@
                 </h2>
 
                 <button
-                    @click="open = false"
+                    @click="
+                        open = false
+                        Livewire.dispatch('reset-search');
+                    "
                     class="text-gray-500 hover:text-gray-800 transition-colors duration-300 ease-linear"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
@@ -63,28 +66,65 @@
                 >
 
                 <div class="flex-1 mt-4 overflow-y-auto">
-                    @forelse ($users as $u)
-                        <a
-                            href="{{route('posts.index', $u->username)}}"
-                            class="flex items-center gap-3 rounded-lg p-3 hover:bg-gray-100 transition"
-                        >
-                            <div class="size-11 rounded-full overflow-hidden">
+                    @forelse ($users as $user)
+                        <div class="
+                            p-3
+                            hover:bg-gray-100
+                            transition-colors duration-300 ease-linear
+                            rounded-md
+                            flex gap-3 items-center justify-between
+                        ">
+
+                            <a
+                                href="{{ route('posts.index', $user->username) }}"
+                                class="flex items-center gap-3 w-full"
+                            >
                                 <img
-                                    class="w-full h-full object-cover"
-                                    src="{{ empty($u->image) ? asset('img/usuario.svg') : asset('profiles/'.$u->image) }}"
+                                    class="size-11 rounded-full object-cover shrink-0"
+                                    src="{{ empty($user->image) ? asset('img/usuario.svg') : asset('profiles/'.$user->image) }}"
                                     alt="Imagen usuario"
                                 >
-                            </div>
 
-                            <div>
-                                <p class="font-medium text-gray-800">
-                                    {{$u->name}}
-                                </p>
-                                <p class="text-sm text-gray-500">
-                                    {{$u->username}}
-                                </p>
-                            </div>
-                        </a>
+                                <div class="min-w-0">
+                                    <p class="text-sm font-medium text-gray-700 sm:whitespace-normal sm:overflow-visible sm:text-clip truncate">
+                                        {{ $user->name }}
+                                    </p>
+
+                                    <p class="text-xs text-gray-500">
+                                        {{ $user->username }}
+                                    </p>
+                                </div>
+                            </a>
+
+                            @if ($user->id !== auth()->user()->id)
+                                <div>
+
+                                    @php
+                                        $follow = $user->follow(auth()->user());
+                                    @endphp
+
+                                    @if (!$follow)
+
+                                        <button
+                                            wire:click="follow({{ $user }})"
+                                            class="text-xs bg-blue-500 hover:bg-blue-600 transition-colors ease-linear duration-300 text-white p-2 rounded"
+                                        >
+                                            Seguir
+                                        </button>
+
+                                    @else
+
+                                        <button
+                                            wire:click="unfollow({{ $user }})"
+                                            class="text-xs text-gray-500 hover:text-gray-600 transition-colors ease-linear duration-300 border border-gray-300 p-2 rounded"
+                                        >
+                                            {{ $follow->pivot->status === 'pending' ? 'Pendiente' : 'Siguiendo' }}
+                                        </button>
+                                    @endif
+                                </div>
+                            @endif
+
+                        </div>
                     @empty
                         @if (strlen($search) >= 3)
                             <p class="mt-4 text-center text-sm text-gray-500">
