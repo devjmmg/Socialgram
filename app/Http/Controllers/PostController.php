@@ -9,12 +9,7 @@ use Illuminate\Support\Facades\File;
 
 class PostController extends Controller
 {
-    
-    public function __construct()
-    {
-        $this->middleware('auth')->except('index','show');
-    }
-    
+
     public function index(User $user)
     {
         $posts = $user->posts()->latest()->paginate(20);
@@ -37,10 +32,14 @@ class PostController extends Controller
     
     public function store(Request $request) {
         
-        $this->validate($request,[
+        $this->validate($request, [
             'title' => 'required',
             'description' => 'required',
             'image' => 'required',
+        ], [
+            'title.required' => 'El título es requerido.',
+            'description.required' => 'La descripción es requerida.',
+            'image.required' => 'Debes seleccionar una imagen.',
         ]);
         
         $request->user()->posts()->create([
