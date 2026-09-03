@@ -17,14 +17,13 @@ class PostController extends Controller
     
     public function index(User $user)
     {
-        
         $posts = $user->posts()->latest()->paginate(20);
         return view('dashboard',[
             'user' => $user,
             'posts' => $posts,
             'total' => $user->posts()->count(),
-            'followers' => $user->followers()->count(),
-            'following' => $user->following()->count(),
+            'followers' => $user->followers()->wherePivot('status', 'accepted')->count(),
+            'following' => $user->following()->wherePivot('status', 'accepted')->count(),
 
         ]);
         

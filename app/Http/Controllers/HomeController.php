@@ -9,9 +9,7 @@ class HomeController extends Controller
 
     public function __invoke()
     {
-
-        $ids = auth()->user()->following->pluck('id')->toArray();
-        $posts = Post::whereIn('user_id', $ids)->latest()->paginate(20);
+        $posts = Post::whereIn('user_id', auth()->user()->following()->wherePivot('status', 'accepted')->select('users.id'))->latest()->paginate(20);
 
         return view('home',[
             'posts' => $posts    

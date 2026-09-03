@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-Perfil
+    Perfil
 @endsection
 
 @section('content')
@@ -22,7 +22,7 @@ Perfil
                 @auth
                     @if ($user->id === auth()->user()->id)
                         <a href="{{route('profile.edit', $user)}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-500 hover:text-gray-800 transition-colors duration-300 ease-linear">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                             </svg>
                         </a>
@@ -45,28 +45,37 @@ Perfil
             
             @auth
                 @if ($user->id !== auth()->user()->id)
-                    @if (!$user->followedBy( auth()->user()))
-                    
-                        <form action="{{route('follow.store', $user)}}" method="POST">
+
+                    @php
+                        $follow = $user->follow(auth()->user());
+                    @endphp
+
+                    @if (!$follow)
+
+                        <form action="{{ route('followers.store', $user) }}" method="POST">
                             @csrf
                             <input
-                            type="submit"
-                            class="cursor-pointer bg-blue-500 text-white p-1 font-semibold rounded-md transition-colors duration-300 ease-linear hover:bg-blue-600 min-w-44 text-center" 
-                            value="Seguir">
+                                type="submit"
+                                class="cursor-pointer bg-blue-500 text-white p-1 font-semibold rounded-md transition-colors duration-300 ease-linear hover:bg-blue-600 min-w-44 text-center"
+                                value="Seguir"
+                            >
                         </form>
-                    
+
                     @else
-                    
-                        <form action="{{route('follow.destroy', $user)}}" method="POST">
+
+                        <form action="{{ route('followers.destroy', $user) }}" method="POST">
                             @csrf
                             @method('DELETE')
+
                             <input
-                            type="submit"
-                            class="cursor-pointer bg-red-500 text-white p-1 font-semibold rounded-md transition-colors duration-300 ease-linear hover:bg-red-600 min-w-44 text-center"
-                            value="Dejar de seguir">
+                                type="submit"
+                                class="cursor-pointer text-white p-1 font-semibold rounded-md transition-colors duration-300 ease-linear bg-gray-500 hover:bg-gray-600 min-w-44 text-center"
+                                value="{{ $follow->pivot->status === 'pending' ? 'Pendiente' : 'Siguiendo' }}"
+                            >
                         </form>
-                    
+
                     @endif
+
                 @endif
             @endauth
         </div>
@@ -76,33 +85,49 @@ Perfil
 
     @auth
 
-        @if ($posts->isEmpty())
+        @php
+            $follow = $user->follow(auth()->user());
+        @endphp
 
-            @if ( $user->id === auth()->user()->id)
-                <p class="text-center text-gray-700 text-lg">Aún no hay publicaciones, comienza creando una: 
-                    <a class="text-blue-500 hover:text-blue-600 transition-colors duration-300 ease-linear font-medium" href="{{ route('posts.create') }}">Crear publicación</a>
-                </p>    
+        @if ($user->id === auth()->user()->id || ($follow && $follow->pivot->status === 'accepted'))
+
+            @if ($posts->isEmpty())
+
+                @if ($user->id === auth()->user()->id)
+
+                    <p class="text-center text-gray-700 text-lg">
+                        Aún no hay publicaciones, comienza creando una:
+                        <a
+                            class="text-blue-500 hover:text-blue-600 transition-colors duration-300 ease-linear font-medium"
+                            href="{{ route('posts.create') }}"
+                        >
+                            Crear publicación
+                        </a>
+                    </p>
+
+                @else
+
+                    <p class="text-center text-gray-700 text-lg">
+                        Aún no hay publicaciones.
+                    </p>
+
+                @endif
+
             @else
-                <p class="text-center text-gray-700 text-lg">Aún no hay publicaciones.</p>
-            @endif
 
-        @else
-
-            @if ($user->id === auth()->user()->id || $user->followedBy(auth()->user()))
-                
-                <x-list-post :posts="$posts"/>
+                <x-list-post :posts="$posts" />
 
                 <div class="mt-4">
                     {{ $posts->links('pagination::tailwind') }}
                 </div>
 
-            @else
-
-                <p class="text-center text-lg font-medium text-gray-500 mt-3">
-                    Esta cuenta es privada
-                </p>
-                
             @endif
+
+        @else
+
+            <p class="text-center text-lg font-medium text-gray-500 mt-3">
+                Esta cuenta es privada
+            </p>
 
         @endif
 

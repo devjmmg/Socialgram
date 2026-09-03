@@ -1,5 +1,4 @@
-<div class="">
-
+<div>
     <div class="sticky top-15 p-4 bg-white">
         <input
             type="text"
@@ -9,7 +8,6 @@
             class="w-full rounded-md border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none placeholder:text-gray-400 transition-colors duration-300 ease-linear"
         >
     </div>
-
     <div class="p-4 pt-0">
         @forelse ($users as $u)
             <a

@@ -59,29 +59,21 @@ class User extends Authenticatable
     //Nota: El metodo followers en la tabla de followers pertenece a muchos usuarios
     public function followers()
     {
-        return $this->belongsToMany(User::class,'followers','user_id','follower_id');
+        return $this->belongsToMany(User::class,'followers','user_id','follower_id')->withPivot('status')->withTimestamps();
     }
 
     //Almacena los que nosotros seguimos (quiénes sigo)
     public function following()
     {
-        return $this->belongsToMany(User::class,'followers','follower_id','user_id');
+        return $this->belongsToMany(User::class,'followers','follower_id','user_id')->withPivot('status')->withTimestamps();
     }
 
     //¿Ya lo seguimos?
     //En la url tiene el usuario a quien estamos siguiendo y es quien
     //preguntamos si es seguido por nosotros el que esta autenticado
-    public function followedBy(User $user)
+    public function follow(User $user)
     {
-        //return $this->followers->contains($user->id);
-        
-        $follow = $this->followers()->where('follower_id', $user->id)->first();
-
-        if (!$follow) {
-            return false;
-        }
-
-        return true;
+        return $this->followers()->where('follower_id', $user->id)->first();
     }
 
     

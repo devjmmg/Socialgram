@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Follower;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class FollowerController extends Controller
 {
+
+    public function index()
+    {
+        return view('followers.index');
+    }
     
     public function store(User $user, Request $request)
     {
@@ -29,17 +33,6 @@ class FollowerController extends Controller
 
     public function destroy(User $user, Request $request)
     {
-        //1°
-        // Follower::where('user_id', $user->id)
-        // ->where('follower_id', auth()->user()->id)
-        // ->delete();
-
-        //2°
-        // $user->followers()->detach([
-        //     'follower_id' => auth()->user()->id
-        // ]);
-        
-        //3°
         $user->followers()->detach( auth()->user()->id );
         return back();
     }

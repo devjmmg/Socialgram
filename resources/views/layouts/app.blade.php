@@ -117,7 +117,7 @@
                                 Notificaciones
                             </a>
                             <a
-                                href="#"
+                                href="{{ route('followers.index') }}"
                                 class="text-center text-sm font-medium text-white p-4 hover:bg-blue-500 transition-colors duration-300 ease-linear"
                             >
                                 Solicitudes
@@ -219,70 +219,7 @@
                         </svg>
                     </a>
 
-                    <div
-                        x-data="{ open: false }"
-                        x-effect="document.documentElement.style.overflow = open ? 'hidden' : ''"
-                        @keydown.escape.window="
-                            open = false;
-                            Livewire.dispatch('reset-search');
-                        "
-                        @resize.window = "
-                            open = false;
-                            Livewire.dispatch('reset-search');
-                        "
-                    >
-                        <button
-                            @click="open = true"
-                            class="text-sm text-gray-500 hover:text-blue-500 transition-colors duration-300 ease-linear focus:outline-none flex items-center -translate-y-"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
-                                <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                        <div
-                            x-cloak
-                            x-show="open"
-                            @click.self="
-                                open = false;
-                                Livewire.dispatch('reset-search');
-                            "
-                            x-transition:enter="transition-opacity duration-1000"
-                            x-transition:enter-start="opacity-0"
-                            x-transition:enter-end="opacity-100"
-                            x-transition:leave="transition-opacity duration-500"
-                            x-transition:leave-start="opacity-100"
-                            x-transition:leave-end="opacity-0"
-                            class="fixed inset-0 z-30 bg-black/50 p-4"
-                        >
-                            <div
-                                class="h-full flex flex-col max-w-3xl mx-auto rounded-xl bg-white shadow-xl"
-                            >
-                                <div class="flex items-center justify-between p-4 border-b border-gray-200">
-                                    <h2 class="text-md font-medium text-gray-800">
-                                        Buscar amigos
-                                    </h2>
-
-                                    <button
-                                        @click="open = false"
-                                        class="text-gray-500 hover:text-gray-800 transition-colors duration-300 ease-linear"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                                        </svg>
-
-                                    </button>
-                                </div>
-                                
-                                <livewire:user-search-modal />
-
-                                {{-- 
-                                    <div class="p-4 border-t border-gray-200">
-                                        Footer
-                                    </div> 
-                                --}}
-                            </div>
-                        </div>
-                    </div>
+                    <livewire:user-search-modal />
                     
                     <div
                         x-data="{ open: false }"
@@ -308,42 +245,25 @@
                             x-transition:leave="transition ease-in duration-100"
                             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                             x-transition:leave-end="opacity-0 -translate-y-1 scale-95"
-                            class="absolute mt-2 w-60 rounded-lg border border-gray-200 bg-white shadow right-0"
+                            class="absolute mt-2 w-72 overflow-hidden rounded-md border border-gray-200 bg-white shadow right-0"
                         >
-                            Notificaciones
+                            <div>
+                                <h3 class="px-3 py-2 text-sm font-medium border-b border-gray-200 text-gray-700">Notificaciones</h3>
+                                <div class="">
+                                    <a class="block px-3 py-2 text-sm text-gray-500 hover:bg-gray-100" href="#">Link 1</a>
+                                    <a class="block px-3 py-2 text-sm text-gray-500 hover:bg-gray-100" href="#">Link 2</a>
+                                    <a class="block px-3 py-2 text-sm text-gray-500 hover:bg-gray-100" href="#">Link 3</a>
+                                    <a class="block px-3 py-2 text-sm text-gray-500 hover:bg-gray-100" href="#">Link 4</a>
+                                    <a class="block px-3 py-2 text-sm text-gray-500 hover:bg-gray-100" href="#">Link 5</a>
+                                </div>
+                            </div>
                         </div>
+                        <p class="absolute w-5 h-5 rounded bg-blue-500 flex justify-center items-center text-white text-xs -top-3 left-3">
+                            0
+                        </p>
                     </div>
 
-                    <div
-                        x-data="{ open: false }"
-                        @click.outside="open = false"
-                        @keydown.escape.window="open = false"
-                        @resize.window="open = false"
-                        class="relative"
-                    >
-                        <button
-                            @click="open = !open"
-                            class="text-sm text-gray-500 hover:text-blue-500 transition-colors duration-300 ease-linear focus:outline-none flex items-center"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
-                                <path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z" clip-rule="evenodd" />
-                                <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
-                            </svg>
-                        </button>
-                        <div
-                            x-cloak
-                            x-show="open"
-                            x-transition:enter="transition ease-linear duration-200"
-                            x-transition:enter-start="opacity-0 -translate-y-1 scale-95"
-                            x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-                            x-transition:leave="transition ease-in duration-100"
-                            x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-                            x-transition:leave-end="opacity-0 -translate-y-1 scale-95"
-                            class="absolute mt-2 w-60 rounded-lg border border-gray-200 bg-white shadow right-0"
-                        >
-                            Solicitudes
-                        </div>
-                    </div>
+                    <livewire:followers.follow-requests-modal />
 
                     <a
                         class="text-sm text-gray-500 hover:text-blue-500 transition-colors duration-300 ease-linear"
@@ -367,7 +287,7 @@
                             class="text-sm text-gray-500 hover:text-blue-500 transition-colors duration-300 ease-linear focus:outline-none flex gap-2 items-center justify-center"
                         >
 
-                            {{ auth()->user()->name }}
+                            {{ auth()->user()->username }}
 
                             <svg
                                 :class="open ? 'rotate-180' : ''"
@@ -395,18 +315,18 @@
                             x-transition:leave="transition ease-in duration-100"
                             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                             x-transition:leave-end="opacity-0 -translate-y-1 scale-95"
-                            class="absolute right-0 mt-2 w-40 rounded-lg border border-gray-200 bg-white shadow"
+                            class="absolute right-0 mt-2 w-40 rounded-md border border-gray-200 bg-white shadow"
                         >
                             <a
                                 href="{{route('posts.index', auth()->user()->username)}}"
-                                class="block rounded px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 transition"
+                                class="block rounded-t-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 transition"
                             >
                                 Perfil
                             </a>
 
                             <a
                                 href="{{route('profile.edit', auth()->user()->username)}}"
-                                class="block rounded px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 transition"
+                                class="block px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 transition"
                             >
                                 Configuración
                             </a>
@@ -415,7 +335,7 @@
                                 <input
                                     type="submit"
                                     value="Salir"
-                                    class="block rounded px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 transition w-full text-left cursor-pointer"
+                                    class="block rounded-b-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 transition w-full text-left cursor-pointer"
                                 />
                             </form>
                         </div>
