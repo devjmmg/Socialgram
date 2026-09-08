@@ -13,7 +13,9 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "cropperjs": "^2.2.0",
         "dropzone": "^6.0.0-beta.2",
+        "sweetalert2": "^11.26.25",
         "swiper": "^11.2.0",
         "tailwind-scrollbar": "^2.0.0"
     }

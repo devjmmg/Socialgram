@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml" sizes="any">
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml" sizes="any">
     <title>Socialgram @hasSection ('title') - @yield('title') @endif</title>
     @stack('style')
     @vite(['resources/css/app.css', 'resources/js/app.js'])

@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Laravel\Facades\Image;
 
 class PostController extends Controller
 {
@@ -36,17 +37,26 @@ class PostController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'description' => 'required',
-            'image' => 'required',
+            'image' => 'required|image',
         ], [
             'title.required' => 'El título es requerido.',
             'description.required' => 'La descripción es requerida.',
             'image.required' => 'Debes seleccionar una imagen.',
+            'image.image' => 'El archivo debe ser una imagen.',
         ]);
+
+        $image = $request->file('image');
+        $imageName = Str::uuid() . '.webp';
+        $serverImage = Image::read($image);
+        Storage::disk('public')->put(
+            'uploads/' . $imageName,
+            $serverImage->toWebp(90)
+        );
         
         $request->user()->posts()->create([
             'title' => $request->title,
             'description' => $request->description,
-            'image' => $request->image
+            'image' => $imageName
         ]);
         
         return redirect()->route('posts.index', auth()->user()->username);

@@ -5,7 +5,6 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\FriendController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PostController;
@@ -48,9 +47,6 @@ Route::post('{user:username}/posts/{post}', [CommentController::class,'store'])-
 //Me gusta a las fotos
 Route::post('/posts/{post}/likes', [LikeController::class,'store'])->name('posts.like.store');
 Route::delete('/posts/{post}/likes', [LikeController::class,'destroy'])->name('posts.like.destroy');
-
-//Subir imagen
-Route::post('/images', [ImageController::class,'store'])->name('images.store');
 
 //Editar perfil
 Route::get('/{user:username}/edit', [ProfileController::class,'edit'])->name('profile.edit');

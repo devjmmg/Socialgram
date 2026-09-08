@@ -16,6 +16,12 @@ module.exports = {
             spacing: {
                 '15': '60px',
             },
+            height: {
+                100: '400px',
+            },
+            with: {
+                100: '400px',
+            },
         },
     },
     plugins: [
