@@ -44,71 +44,13 @@
             </p>
 
             <livewire:followers.follow-button :user="$user" />
+            
         </div>
     </div>
 
     <p class="text-center mb-8 font-semibold text-2xl">Publicaciones</p>
 
-    @auth
-
-        @php
-            $follow = $user->follow(auth()->user());
-        @endphp
-
-        @if ($user->id === auth()->user()->id || ($follow && $follow->pivot->status === 'accepted'))
-
-            @if ($posts->isEmpty())
-
-                @if ($user->id === auth()->user()->id)
-
-                    <p class="text-center text-gray-700 text-lg">
-                        Aún no hay publicaciones, comienza creando una:
-                        <a
-                            class="text-blue-500 hover:text-blue-600 transition-colors duration-300 ease-linear font-medium"
-                            href="{{ route('posts.create') }}"
-                        >
-                            Crear publicación
-                        </a>
-                    </p>
-
-                @else
-
-                    <p class="text-center text-gray-700 text-lg">
-                        Aún no hay publicaciones.
-                    </p>
-
-                @endif
-
-            @else
-
-                <x-list-post :posts="$posts" />
-
-                <div class="mt-4">
-                    {{ $posts->links('pagination::tailwind') }}
-                </div>
-
-            @endif
-
-        @else
-
-            <p class="text-center text-lg font-medium text-gray-500 mt-3">
-                Esta cuenta es privada
-            </p>
-
-        @endif
-
-    @endauth
-
-    @guest
-        <p class="mt-6 text-center text-lg font-semibold text-gray-500">
-            ¡<a href="{{ route('register') }}" class="text-blue-500 hover:text-blue-600 transition-colors duration-300 ease-linear">Regístrate ahora</a>
-            o
-            <a href="{{ route('login') }}" class="text-blue-500 hover:text-blue-600 transition-colors duration-300 ease-linear">
-                Inicia sesión
-            </a>
-            y sigue a tus amigos para ver sus publicaciones!
-        </p>
-    @endguest
+    <livewire:posts.profile-post :user="$user" />
 
 </main>
 
