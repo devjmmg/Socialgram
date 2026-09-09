@@ -16,7 +16,14 @@ class FollowRequests extends Component
     public $pendingFollowers = [];
 
     #[On('follow-request-updated')]
-    public function refreshRequests() {}
+    public function refreshRequests()
+    {
+        $this->page = 1;
+        $this->pendingFollowers = [];
+        $this->hasMore = false;
+
+        $this->loadFollowers();
+    }
 
     public function mount()
     {
@@ -34,7 +41,7 @@ class FollowRequests extends Component
 
     private function loadFollowers()
     {
-        $pendingFollowers = auth()->user()->followers()->wherePivot('status', 'pending')->orderByPivot('created_at', 'ASC')->paginate($this->perPage, ['*'], 'page', $this->page);
+        $pendingFollowers = auth()->user()->followers()->wherePivot('status', 'pending')->orderByPivot('created_at', 'DESC')->paginate($this->perPage, ['*'], 'page', $this->page);
         $this->pendingFollowers = collect($this->pendingFollowers)->merge($pendingFollowers->items());
         $this->hasMore = $pendingFollowers->hasMorePages();
     }

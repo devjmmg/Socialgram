@@ -36,7 +36,7 @@ class FollowRequestsModal extends Component
 
     public function render()
     {
-        $pendingFollowers = auth()->check() ? auth()->user()->followers()->wherePivot('status', 'pending')->orderByPivot('created_at', 'ASC')->paginate(5) : collect();
+        $pendingFollowers = auth()->check() ? auth()->user()->followers()->wherePivot('status', 'pending')->orderByPivot('created_at', 'DESC')->paginate(5) : collect();
         $pendingFollowersTotal = auth()->check() ? $pendingFollowers->total() : 0;
         return view('livewire.followers.follow-requests-modal', [
             'pendingFollowers' => $pendingFollowers,
