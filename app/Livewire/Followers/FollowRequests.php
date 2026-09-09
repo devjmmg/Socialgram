@@ -9,15 +9,34 @@ use Livewire\Component;
 class FollowRequests extends Component
 {
 
+    public int $page = 1;
     public int $perPage = 20;
     public bool $hasMore = false;
+
+    public $pendingFollowers = [];
 
     #[On('follow-request-updated')]
     public function refreshRequests() {}
 
+    public function mount()
+    {
+        $this->loadFollowers();
+    }
+
     public function loadMore()
     {
-        $this->perPage += 20;
+        if (!$this->hasMore) {
+            return;
+        }
+        $this->page++;
+        $this->loadFollowers();
+    }
+
+    private function loadFollowers()
+    {
+        $pendingFollowers = auth()->user()->followers()->wherePivot('status', 'pending')->orderByPivot('created_at', 'ASC')->paginate($this->perPage, ['*'], 'page', $this->page);
+        $this->pendingFollowers = collect($this->pendingFollowers)->merge($pendingFollowers->items());
+        $this->hasMore = $pendingFollowers->hasMorePages();
     }
 
     public function accept(User $user)
@@ -44,10 +63,6 @@ class FollowRequests extends Component
 
     public function render()
     {
-        $pendingFollowers = auth()->user()->followers()->wherePivot('status', 'pending')->orderByPivot('created_at', 'ASC')->paginate($this->perPage);
-        $this->hasMore = $pendingFollowers->hasMorePages();
-        return view('livewire.followers.follow-requests', [
-            'pendingFollowers' => $pendingFollowers
-        ]);
+        return view('livewire.followers.follow-requests');
     }
 }

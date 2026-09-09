@@ -10,15 +10,18 @@
     </div>
     <div class="p-4 flex flex-col gap-4">
         @forelse ($users as $user)
-            <div class="
-                p-4
-                border border-gray-200
-                hover:bg-gray-100
-                transition-colors duration-300 ease-linear
-                rounded-md
-                flex flex-col gap-4
-                sm:flex-row sm:items-center sm:justify-between
-            ">
+            <div
+                wire:key="user-row-{{ $user->id }}"
+                class="
+                    p-4
+                    border border-gray-200
+                    hover:bg-gray-100
+                    transition-colors duration-300 ease-linear
+                    rounded-md
+                    flex flex-col gap-4
+                    sm:flex-row sm:items-center sm:justify-between
+                "
+            >
 
                 <a
                     href="{{ route('posts.index', $user->username) }}"
@@ -51,6 +54,7 @@
                         @if (!$follow)
 
                             <button
+                                wire:key="btn-follow-{{ $user->id }}"
                                 wire:click="follow({{ $user }})"
                                 class="w-full md:w-auto text-xs bg-blue-500 hover:bg-blue-600 transition-colors ease-linear duration-300 text-white p-2 md:px-3 md:py-2 rounded"
                             >
@@ -60,6 +64,7 @@
                         @else
 
                             <button
+                                wire:key="btn-unfollow-{{ $user->id }}"
                                 wire:click="unfollow({{ $user }})"
                                 class="w-full md:w-auto text-xs text-gray-500 hover:text-gray-600 transition-colors ease-linear duration-300 border border-gray-300 p-2 md:px-3 md:py-2 rounded"
                             >
