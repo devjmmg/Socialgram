@@ -15,12 +15,8 @@ class PostController extends Controller
     public function index(User $user)
     {
         return view('dashboard',[
-            'user' => $user,
-            'total' => $user->posts()->count(),
-            'followers' => $user->followers()->wherePivot('status', 'accepted')->count(),
-            'following' => $user->following()->wherePivot('status', 'accepted')->count(),
+            'user' => $user
         ]);
-        
     }
     
     public function create() {
