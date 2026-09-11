@@ -18,16 +18,62 @@
 
                     <div class="text-sm">
                         
-                        <div class="flex items-center gap-2">
-                            <a
-                                href="{{ route('posts.index', $comment->user->username) }}"
-                                class="font-semibold text-gray-800 hover:text-gray-600 transition-colors duration-300 ease-linear"
-                            >
-                                {{ $comment->user->username }}
-                            </a>
-                            <span class="text-xs text-gray-400">
-                                {{ str_replace('hace ', '', $comment->created_at->diffForHumans()) }}
-                            </span>
+                        <div class="flex items-center justify-between py-1">
+                            <div class="flex items-center gap-2">
+                                <a
+                                    href="{{ route('posts.index', $comment->user->username) }}"
+                                    class="font-semibold text-gray-800 hover:text-gray-600 transition-colors duration-300 ease-linear"
+                                >
+                                    {{ $comment->user->username }}
+                                </a>
+                                <span class="text-xs text-gray-400">
+                                    {{ str_replace('hace ', '', $comment->created_at->diffForHumans()) }}
+                                </span>
+                            </div>
+                            @auth
+
+                                @if ($post->user_id === auth()->id() || $comment->user_id === auth()->id())
+
+                                    <div
+                                        x-data="{ open: false }"
+                                        class="relative flex items-center"
+                                    >
+
+                                        <button
+                                            type="button"
+                                            @click="open = !open"
+                                            class="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                                            
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                            </svg>
+                                        </button>
+
+                                        <div
+                                            x-show="open"
+                                            x-cloak
+                                            @click.outside="open = false"
+                                            @keydown.escape.window="open = false"
+                                            x-transition
+                                            class="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded shadow z-10"
+                                        >
+                                            <button
+                                                @click="open = false"
+                                                wire:click="destroy({{ $comment->id }})"
+                                                type="button"
+                                                class="w-full text-left px-3 py-2 text-red-500"
+                                            >
+                                                Eliminar comentario
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                @endif
+
+                            @endauth
                         </div>
 
                         <span class="text-gray-700 sm:whitespace-pre">{{ $comment->comment }}</span>

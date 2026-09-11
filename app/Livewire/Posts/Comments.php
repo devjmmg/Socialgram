@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Posts;
 
+use App\Models\Comment;
 use App\Models\Post;
 use Livewire\Component;
 
@@ -61,6 +62,13 @@ class Comments extends Component
             'user_id' => auth()->id()
         ]);
         $this->reset('comment');
+        $this->reloadComments();
+    }
+
+    public function destroy(Comment $comment)
+    {
+        $this->authorize('delete', $comment);
+        $comment->delete();
         $this->reloadComments();
     }
 
