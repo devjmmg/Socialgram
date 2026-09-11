@@ -30,7 +30,9 @@
                             </span>
                         </div>
 
-                        <span class="text-gray-700 whitespace-pre-line">{{ $comment->comment }}</span>
+                        <span class="text-gray-700 sm:whitespace-pre">{{ $comment->comment }}</span>
+
+                        <livewire:posts.comment-item :key="'comment-' . $comment->id" :comment="$comment" />
 
                     </div>
 

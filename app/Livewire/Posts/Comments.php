@@ -8,11 +8,11 @@ use Livewire\Component;
 class Comments extends Component
 {
     public int $page = 1;
-    public int $perPage = 5;
+    public int $perPage = 10;
     public bool $hasMore = false;
 
     public Post $post;
-    public string $comment = '';
+    public string $comment = ''; // wire.model="comment" -> comments.blade.php
 
     public $comments = [];
 
@@ -33,7 +33,7 @@ class Comments extends Component
 
     private function loadComments()
     {
-        $comments = $this->post->comments()->with('user')->latest()->paginate($this->perPage, ['*'], 'page', $this->page);
+        $comments = $this->post->comments()->with('user')->withCount('likes')->latest()->paginate($this->perPage, ['*'], 'page', $this->page);
         $this->comments = collect($this->comments)->merge($comments->items());
         $this->hasMore = $comments->hasMorePages();
     }

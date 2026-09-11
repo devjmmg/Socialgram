@@ -19,4 +19,13 @@ class Comment extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function likes()
+    {
+        return $this->hasMany(LikeComment::class);
+    }
+
+    public function checkLike(User $user){
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
 }
