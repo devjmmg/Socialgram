@@ -3,6 +3,7 @@
 namespace App\Livewire\Posts;
 
 use App\Models\Post;
+use App\Notifications\PostLiked;
 use Livewire\Component;
 
 class FeedPost extends Component
@@ -47,6 +48,11 @@ class FeedPost extends Component
             $post->likes()->create([
                 'user_id' => auth()->user()->id
             ]);
+
+            if ($post->user_id !== auth()->id()) {
+                $post->user->notify( new PostLiked(auth()->user(), $post) );
+            }
+
         }
     }
 

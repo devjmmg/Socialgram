@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Notifications\PostLiked;
 use Livewire\Component;
 
 class LikePost extends Component
@@ -32,6 +33,9 @@ class LikePost extends Component
             ]);
             $this->isLiked = true;
             $this->likes++;
+            if ($this->post->user_id !== auth()->id()) {
+                $this->post->user->notify( new PostLiked(auth()->user(), $this->post) );
+            }
         }
     }
 

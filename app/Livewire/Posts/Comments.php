@@ -16,6 +16,7 @@ class Comments extends Component
     public string $comment = ''; // wire.model="comment" -> comments.blade.php
 
     public $comments = [];
+    public ?int $commentId = null; // Localizar el comentario a resaltar
 
     public function mount()
     {
@@ -70,6 +71,27 @@ class Comments extends Component
         $this->authorize('delete', $comment);
         $comment->delete();
         $this->reloadComments();
+    }
+
+    public function updatedCommentId()
+    {
+        $this->findComment();
+    }
+
+    public function findComment()
+    {
+        if (!$this->commentId) {
+            return;
+        }
+
+        while (!$this->comments->contains('id', $this->commentId) && $this->hasMore) {
+            $this->page++;
+            $this->loadComments();
+        }
+
+        if ($this->comments->contains('id', $this->commentId)) {
+            $this->dispatch('comment-found', commentId: $this->commentId);
+        }
     }
 
     public function render()

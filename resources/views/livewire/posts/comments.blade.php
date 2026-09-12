@@ -1,10 +1,10 @@
 <div>
 
-    <div class="p-4 flex flex-col gap-3">
+    <div class="flex flex-col gap-3">
 
         @forelse ($comments as $comment)
 
-            <div class="flex items-start gap-4">
+            <div id="comment-{{ $comment->id }}" class="flex items-start gap-4 px-4 py-2">
 
                 <a href="{{ route('posts.index', $comment->user->username) }}">
                     <img
@@ -171,3 +171,35 @@
 
     @endauth
 </div>
+
+@script
+    <script>
+        const commentId = sessionStorage.getItem('notification_comment');
+
+        if (commentId) {
+            $wire.set('commentId', Number(commentId));
+        }
+
+        $wire.on('comment-found', ({ commentId }) => {
+            const comment = document.querySelector(`#comment-${commentId}`);
+
+            if (!comment) {
+                return;
+            }
+
+            requestAnimationFrame(() => {
+                comment.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+
+                comment.classList.add('bg-blue-100');
+
+                setTimeout(() => {
+                    comment.classList.remove('bg-blue-100');
+                    sessionStorage.removeItem('notification_comment');
+                }, 2000);
+            });
+        });
+    </script>
+@endscript

@@ -3,6 +3,7 @@
 namespace App\Livewire\Posts;
 
 use App\Models\Comment;
+use App\Notifications\LikeComment;
 use Livewire\Component;
 
 class CommentItem extends Component
@@ -19,6 +20,9 @@ class CommentItem extends Component
             $comment->likes()->create([
                 'user_id' => auth()->id()
             ]);
+            if ($this->comment->user_id !== auth()->id()) {
+                $this->comment->user->notify( new LikeComment(auth()->user(), $this->comment) );
+            }
         }
         $this->comment->loadCount('likes');
     }
