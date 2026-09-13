@@ -19,21 +19,23 @@ class Notifications extends Component
 
     public function mount()
     {
-        $notifications = auth()->user()->notifications()->where('created_at', '>=', now()->subMonth());
+        $notifications = auth()->user()->notifications()->where('created_at', '>=', now()->subMonth())->latest()->get();
 
-        $this->notifications = $notifications->latest()->take(10)->get();
-        $this->hasMoreNotifications = $notifications->count() > 10;
-
-        $userIds = $this->notifications->map(fn ($n) => $n->data['user_id'])->unique();
+        // Users
+        $userIds = $notifications->map(fn ($n) => $n->data['user_id'])->unique();
         $this->users = User::whereIn('id', $userIds)->get()->keyBy('id');
 
-        //Like Notification
+        $validNotifications = $notifications->filter(fn ($n) => isset($this->users[$n->data['user_id']]));
+        $this->notifications = $validNotifications->take(10)->values(); // values -> reindexa los valores 0, 1, 2 ,3 ,4 ...
+
+        // Like Notification
         $likeNotification = $this->notifications->where('data.type', 'like');
         $postIds = $likeNotification->map(fn ($n) => $n->data['post_id'])->unique();
         $this->posts = Post::whereIn('id', $postIds)->get()->keyBy('id');
 
-        $likeCommentNotification = $this->notifications->where('data.type', 'like_comment');
-        $commentIds = $likeCommentNotification->map(fn ($n) => $n->data['comment_id'])->unique();
+        // Comment / LikeComment Notification
+        $commentNotification = $this->notifications->whereIn('data.type', ['like_comment', 'comment']);
+        $commentIds = $commentNotification->map(fn ($n) => $n->data['comment_id'])->unique();
         $this->comments = Comment::whereIn('id', $commentIds)->with('post')->get()->keyBy('id');
 
         $this->unreadCount = auth()->user()->unreadNotifications()->count();

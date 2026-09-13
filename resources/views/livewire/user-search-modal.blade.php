@@ -106,7 +106,7 @@
                                     @if (!$follow)
 
                                         <button
-                                            wire:click="follow({{ $user }})"
+                                            wire:click="follow({{ $user->id }})"
                                             class="text-xs bg-blue-500 hover:bg-blue-600 transition-colors ease-linear duration-300 text-white p-2 rounded"
                                         >
                                             Seguir
@@ -115,7 +115,7 @@
                                     @else
 
                                         <button
-                                            wire:click="unfollow({{ $user }})"
+                                            wire:click="unfollow({{ $user->id }})"
                                             class="text-xs text-gray-500 hover:text-gray-600 transition-colors ease-linear duration-300 border border-gray-300 p-2 rounded"
                                         >
                                             {{ $follow->pivot->status === 'pending' ? 'Pendiente' : 'Siguiendo' }}

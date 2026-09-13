@@ -6,6 +6,8 @@
 
 @section('content')
 
+<livewire:followers.follow-requests-profile :user="$user" />
+
 <main class="mt-15 flex-1 p-4 max-w-7xl mx-auto w-full">
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center justify-center mb-10">

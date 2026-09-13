@@ -6,11 +6,13 @@ use App\Models\User;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class FollowRequestsModal extends Component
+class FollowRequestsProfile extends Component
 {
-
     #[On('follow-request-updated')]
     public function refreshRequests() {}
+
+    public User $user;
+    public $hasPendingRequest = false;
 
     public function accept(User $user)
     {
@@ -35,14 +37,10 @@ class FollowRequestsModal extends Component
         $this->dispatch('follow-request-updated');
         $this->dispatch('friend-request-updated');
     }
-
+    
     public function render()
     {
-        $pendingFollowers = auth()->check() ? auth()->user()->followers()->wherePivot('status', 'pending')->orderByPivot('created_at', 'DESC')->paginate(5) : collect();
-        $pendingFollowersTotal = auth()->check() ? $pendingFollowers->total() : 0;
-        return view('livewire.followers.follow-requests-modal', [
-            'pendingFollowers' => $pendingFollowers,
-            'pendingFollowersTotal' => $pendingFollowersTotal
-        ]);
+        $this->hasPendingRequest = auth()->check() ? auth()->user()->followers()->wherePivot('user_id', auth()->id())->wherePivot('follower_id', $this->user->id)->wherePivot('status', 'pending')->exists() : false;
+        return view('livewire.followers.follow-requests-profile');
     }
 }

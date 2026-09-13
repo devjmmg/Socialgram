@@ -55,7 +55,7 @@
 
                             <button
                                 wire:key="btn-follow-{{ $user->id }}"
-                                wire:click="follow({{ $user }})"
+                                wire:click="follow({{ $user->id }})"
                                 class="w-full md:w-auto text-xs bg-blue-500 hover:bg-blue-600 transition-colors ease-linear duration-300 text-white p-2 md:px-3 md:py-2 rounded"
                             >
                                 Seguir
@@ -65,7 +65,7 @@
 
                             <button
                                 wire:key="btn-unfollow-{{ $user->id }}"
-                                wire:click="unfollow({{ $user }})"
+                                wire:click="unfollow({{ $user->id }})"
                                 class="w-full md:w-auto text-xs text-gray-500 hover:text-gray-600 transition-colors ease-linear duration-300 border border-gray-300 p-2 md:px-3 md:py-2 rounded"
                             >
                                 {{ $follow->pivot->status === 'pending' ? 'Pendiente' : 'Siguiendo' }}

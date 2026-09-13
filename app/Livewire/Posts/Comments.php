@@ -4,6 +4,7 @@ namespace App\Livewire\Posts;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Notifications\PostCommented;
 use Livewire\Component;
 
 class Comments extends Component
@@ -58,10 +59,15 @@ class Comments extends Component
         if (trim($this->comment) === '') {
             return;
         }
-        $this->post->comments()->create([
+        $comment = $this->post->comments()->create([
             'comment' => $this->comment,
             'user_id' => auth()->id()
         ]);
+
+        if ($comment->post->user_id !== auth()->id()) {
+            $comment->post->user->notify( new PostCommented(auth()->user(), $comment) );
+        }
+
         $this->reset('comment');
         $this->reloadComments();
     }

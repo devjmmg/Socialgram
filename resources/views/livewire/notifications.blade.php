@@ -33,71 +33,151 @@
             <h3 class="px-3 py-2 text-sm font-medium border-b border-gray-200 text-gray-700">Notificaciones</h3>
             @forelse ($notifications as $notification)
                 @php
-                    $user = $users[$notification->data['user_id']];
+                    $user = $users[$notification->data['user_id']] ?? null;
                 @endphp
-                <div class="px-3 py-2 space-y-1 hover:bg-gray-100 transition-colors duration-300 ease-linear text-sm">
-                    @switch($notification->data['type'])
-                        @case('like')
-                                @php
-                                    $post = $posts[$notification->data['post_id']];
-                                @endphp
 
-                                <a
-                                    href="{{ route('posts.show', ['user' => auth()->user(), 'post' => $post]) }}"
-                                    class="flex items-center gap-3"
-                                >
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm text-gray-700">
-                                            <strong>{{ $user->username }}</strong>
-                                            <span class="text-gray-500">le dio me gusta a tu publicación</span>
-                                        </p>
-                                    </div>
+                @if ($user)
 
-                                    <img src="{{ asset('storage/uploads/' . $post->image) }}" alt="Publicación" class="w-10 h-10 rounded object-cover shrink-0" />
-                                </a>
-                            @break
+                    <div class="px-3 py-2 space-y-1 hover:bg-gray-100 transition-colors duration-300 ease-linear text-sm">
+                        @switch($notification->data['type'])
+                            @case('like')
+                                    @php
+                                        $post = $posts[$notification->data['post_id']] ?? null;
+                                    @endphp
 
-                        @case('like_comment')
-                                @php
-                                    $comment = $comments[$notification->data['comment_id']];
-                                @endphp
+                                    @if ($post)
+
+                                        <a
+                                            href="{{ route('posts.show', ['user' => auth()->user(), 'post' => $post->id]) }}"
+                                            class="flex items-center gap-3"
+                                        >
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-sm text-gray-700">
+                                                    <strong>{{ $user->username }}</strong>
+                                                    <span class="text-gray-500">le dio me gusta a tu publicación</span>
+                                                </p>
+                                            </div>
+
+                                            <img
+                                                src="{{ asset('storage/uploads/' . $post->image) }}"
+                                                alt="Publicación"
+                                                class="w-10 h-10 rounded object-cover shrink-0"
+                                            />
+                                        </a>
+
+                                    @else
+
+                                        <div class="flex items-center gap-3">
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-sm text-gray-700">
+                                                    <strong>{{ $user->username }}</strong>
+                                                    <span class="text-gray-500">le dio me gusta a tu publicación</span>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                    @endif
+                                @break
+
+                            @case('like_comment')
+                                    @php
+                                        $comment = $comments[$notification->data['comment_id']] ?? null;
+                                    @endphp
+
+                                    @if ($comment && $comment->post)
+
+                                        <a
+                                            href="{{ route('posts.show', ['user' => auth()->user(), 'post' => $comment->post->id]) }}"
+                                            onclick="sessionStorage.setItem('notification_comment', '{{ $comment->id }}')"
+                                            class="flex items-center gap-3"
+                                        >
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-sm text-gray-700">
+                                                    <strong>{{ $user->username }}</strong>
+                                                    <span class="text-gray-500">le dio me gusta a tu comentario</span>
+                                                </p>
+
+                                                <p class="text-gray-500 truncate">
+                                                    "{{ $comment->comment }}"
+                                                </p>
+                                            </div>
+
+                                            <img
+                                                src="{{ asset('storage/uploads/' . $comment->post->image) }}"
+                                                alt="Publicación"
+                                                class="w-10 h-10 rounded object-cover shrink-0"
+                                            />
+                                        </a>
+
+                                    @else
+
+                                        <div class="flex items-center gap-3">
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-sm text-gray-700">
+                                                    <strong>{{ $user->username }}</strong>
+                                                    <span class="text-gray-500">le dio me gusta a tu comentario</span>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                    @endif
+                                @break
+
+                            @case('comment')
+                                    @php
+                                        $comment = $comments[$notification->data['comment_id']] ?? null;
+                                    @endphp
+
+                                    @if ($comment && $comment->post)
+
+                                        <a
+                                            href="{{ route('posts.show', ['user' => auth()->user(), 'post' => $comment->post->id]) }}"
+                                            onclick="sessionStorage.setItem('notification_comment', '{{ $comment->id }}')"
+                                            class="flex items-center gap-3"
+                                        >
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-sm text-gray-700">
+                                                    <strong>{{ $user->username }}</strong>
+                                                    <span class="text-gray-500">Comentó tu publicación</span>
+                                                </p>
+
+                                                <p class="text-gray-500 truncate">
+                                                    "{{ $comment->comment }}"
+                                                </p>
+                                            </div>
+
+                                            <img
+                                                src="{{ asset('storage/uploads/' . $comment->post->image) }}"
+                                                alt="Publicación"
+                                                class="w-10 h-10 rounded object-cover shrink-0"
+                                            />
+                                        </a>
+
+                                    @else
+
+                                        <div class="flex items-center gap-3">
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-sm text-gray-700">
+                                                    <strong>{{ $user->username }}</strong>
+                                                    <span class="text-gray-500">Comentó tu publicación</span>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                    @endif
+                                @break
+
+                            @case('follow')
+
+                                @break
+
+                            @default
                                 
-                                <a
-                                    href="{{ route('posts.show', ['user' => auth()->user(), 'post' => $comment->post->id]) }}"
-                                    onclick="sessionStorage.setItem('notification_comment', '{{ $comment->id }}')"
-                                    class="flex items-center gap-3"
-                                >
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm text-gray-700">
-                                            <strong>{{ $user->username }}</strong>
-                                            <span class="text-gray-500">le dio me gusta a tu comentario</span>
-                                        </p>
+                        @endswitch
+                    </div>
 
-                                        <p class="text-gray-500 truncate">
-                                            "{{ $comment->comment }}"
-                                        </p>
-                                    </div>
+                @endif
 
-                                    <img
-                                        src="{{ asset('storage/uploads/' . $comment->post->image) }}"
-                                        alt="Publicación"
-                                        class="w-10 h-10 rounded object-cover shrink-0"
-                                    />
-                                </a>
-                            @break
-
-                        @case('comment')
-
-                            @break
-
-                        @case('follow')
-
-                            @break
-
-                        @default
-                            
-                    @endswitch
-                </div>
             @empty
                 <p class="px-3 py-2 text-sm text-gray-500">
                     No hay notificaciones.
