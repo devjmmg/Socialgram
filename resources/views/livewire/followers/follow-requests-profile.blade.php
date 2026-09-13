@@ -19,7 +19,7 @@
                             type="button"
                             class="w-full md:w-auto px-3 py-2 text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 rounded-md transition-colors duration-300 ease-linear"
                         >
-                            Confirmar
+                            Aceptar
                         </button>
 
                         <button

@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\User;
+use App\Notifications\NewFollower;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -21,6 +22,9 @@ class UserSearchModal extends Component
     public function follow(User $user)
     {
         $user->followers()->attach( auth()->user()->id );
+        if ($user->id !== auth()->id()) {
+            $user->notify( new NewFollower(auth()->user()) );
+        }
         $this->dispatch('friend-request-updated');
     }
 

@@ -3,6 +3,7 @@
 namespace App\Livewire\Followers;
 
 use App\Models\User;
+use App\Notifications\AcceptedFollower;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -55,6 +56,9 @@ class FollowRequests extends Component
         $follow->pivot->update([
             'status' => 'accepted'
         ]);
+        if ($user->id !== auth()->id()) {
+            $user->notify( new AcceptedFollower(auth()->user()) );
+        }
         $this->dispatch('follow-request-updated');
     }
 

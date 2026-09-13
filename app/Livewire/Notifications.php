@@ -26,7 +26,8 @@ class Notifications extends Component
         $this->users = User::whereIn('id', $userIds)->get()->keyBy('id');
 
         $validNotifications = $notifications->filter(fn ($n) => isset($this->users[$n->data['user_id']]));
-        $this->notifications = $validNotifications->take(10)->values(); // values -> reindexa los valores 0, 1, 2 ,3 ,4 ...
+        $this->hasMoreNotifications = $validNotifications->count() > 5;
+        $this->notifications = $validNotifications->take(5)->values(); // values -> reindexa los valores 0, 1, 2 ,3 ,4 ...
 
         // Like Notification
         $likeNotification = $this->notifications->where('data.type', 'like');

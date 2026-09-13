@@ -169,7 +169,47 @@
 
                             @case('follow')
 
-                                @break
+                                <a
+                                    href="{{ route('posts.index', ['user' => $user]) }}"
+                                    class="flex items-center gap-3"
+                                >
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm text-gray-700">
+                                            <strong>{{ $user->username }}</strong>
+                                            <span class="text-gray-500">comenzó a seguirte</span>
+                                        </p>
+                                    </div>
+
+                                    <img
+                                        src="{{ empty($user->image) ? asset('storage/defaults/user.svg') : asset('storage/profile/' . $user->image) }}"
+                                        alt="Perfil de {{ $user->username }}"
+                                        class="w-10 h-10 rounded object-cover shrink-0"
+                                    />
+                                </a>
+
+                            @break
+
+                            @case('acceptFollow')
+
+                                <a
+                                    href="{{ route('posts.index', ['user' => $user]) }}"
+                                    class="flex items-center gap-3"
+                                >
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm text-gray-700">
+                                            <strong>{{ $user->username }}</strong>
+                                            <span class="text-gray-500">aceptó tu solicitud</span>
+                                        </p>
+                                    </div>
+
+                                    <img
+                                        src="{{ empty($user->image) ? asset('storage/defaults/user.svg') : asset('storage/profile/' . $user->image) }}"
+                                        alt="Perfil de {{ $user->username }}"
+                                        class="w-10 h-10 rounded object-cover shrink-0"
+                                    />
+                                </a>
+
+                            @break
 
                             @default
                                 
