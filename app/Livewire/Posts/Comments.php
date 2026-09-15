@@ -5,6 +5,7 @@ namespace App\Livewire\Posts;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Notifications\PostCommented;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Comments extends Component
@@ -18,6 +19,8 @@ class Comments extends Component
 
     public $comments = [];
     public ?int $commentId = null; // Localizar el comentario a resaltar
+
+    public ?Comment $reply = null;
 
     public function mount()
     {
@@ -36,7 +39,13 @@ class Comments extends Component
 
     private function loadComments()
     {
-        $comments = $this->post->comments()->with('user')->withCount('likes')->latest()->paginate($this->perPage, ['*'], 'page', $this->page);
+        $comments = $this->post->comments()->whereNull('parent_id')->with('user')
+        ->with([
+            'replies' => function ($query) {
+                $query->with('user')->withCount('likes');
+            }
+        ])
+        ->withCount('likes')->latest()->paginate($this->perPage, ['*'], 'page', $this->page);
         $this->comments = collect($this->comments)->merge($comments->items());
         $this->hasMore = $comments->hasMorePages();
     }
@@ -59,16 +68,27 @@ class Comments extends Component
         if (trim($this->comment) === '') {
             return;
         }
+
+        $parent_id = $this->reply?->id;
+
         $comment = $this->post->comments()->create([
             'comment' => $this->comment,
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
+            'parent_id' => $this->reply?->id
         ]);
 
         if ($comment->post->user_id !== auth()->id()) {
             $comment->post->user->notify( new PostCommented(auth()->user(), $comment) );
         }
 
+        $this->reply = null;
         $this->reset('comment');
+
+        if ($parent_id) {
+            $this->dispatch('reply-created', parent_id: $parent_id);
+            return;
+        }
+
         $this->reloadComments();
     }
 
@@ -90,14 +110,42 @@ class Comments extends Component
             return;
         }
 
-        while (!$this->comments->contains('id', $this->commentId) && $this->hasMore) {
+        while (!$this->commentExists($this->commentId) && $this->hasMore) {
             $this->page++;
             $this->loadComments();
         }
 
-        if ($this->comments->contains('id', $this->commentId)) {
+        if ($this->commentExists($this->commentId)) {
             $this->dispatch('comment-found', commentId: $this->commentId);
         }
+    }
+
+    private function commentExists(int $commentId)
+    {
+        foreach ($this->comments as $comment) {
+
+            if ($comment->id === $commentId) {
+                return true;
+            }
+
+            if ($comment->replies->contains('id', $commentId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    #[On('reply-to')]
+    public function replyTo(Comment $comment)
+    {
+        $this->reply = $comment->load('user');
+        $this->dispatch('focus-comment');
+    }
+
+    public function cancelReply()
+    {
+        $this->reply = null;
     }
 
     public function render()

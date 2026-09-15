@@ -120,6 +120,23 @@
 
         <div class="border-t border-gray-200 p-4">
 
+            @if ($reply)
+                <div class="flex items-center justify-between mb-2 text-sm text-gray-500">
+                    <span class="truncate">
+                        Respondiendo a {{ '@' . $reply->user->username }}:
+                        "{{ Str::limit($reply->comment, 50) }}"
+                    </span>
+
+                    <button
+                        wire:click="cancelReply"
+                        type="button"
+                        class="ml-2 hover:text-red-500 transition-colors duration-300 ease-linear"
+                    >
+                        Cancelar
+                    </button>
+                </div>
+            @endif
+
             <div class="flex items-center gap-3">
 
                 <textarea
@@ -199,6 +216,17 @@
                     comment.classList.remove('bg-blue-100');
                     sessionStorage.removeItem('notification_comment');
                 }, 2000);
+            });
+        });
+
+        $wire.on('focus-comment', () => {
+            const comment = document.querySelector(`#comment`);
+            requestAnimationFrame(() => {
+                comment.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                comment?.focus();
             });
         });
     </script>

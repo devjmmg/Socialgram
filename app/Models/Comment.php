@@ -12,7 +12,7 @@ class Comment extends Model
     protected $id = 'id';
 
     protected $fillable = [
-        'id', 'comment', 'user_id', 'post_id'
+        'id', 'comment', 'user_id', 'post_id', 'parent_id'
     ];
 
     public function user()
@@ -32,5 +32,15 @@ class Comment extends Model
 
     public function checkLike(User $user){
         return $this->likes()->where('user_id', $user->id)->exists();
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'parent_id');
+    }
+
+    public function replies()
+    {
+        return $this->hasMany(Comment::class, 'parent_id');
     }
 }
